@@ -272,24 +272,32 @@ function App() {
       return;
     }
 
-    const zip = new JSZip();
-    const processedImages = [];
-
+    // Process and download each image individually
     for (let i = 0; i < uploadedFiles.length; i++) {
       const file = uploadedFiles[i];
       const position = imageSettings[i]?.position || "bottom";
       const imagePadding = imageSettings[i]?.padding || 80;
       const blob = await processImage(file, position, imagePadding);
-      processedImages.push({ blob, name: file.name });
-      zip.file(file.name, blob);
+      try {
+        saveAs(blob, file.name);
+      } catch (err) {
+        // Fallback: create an object URL and open in new tab
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      // small delay to avoid browser blocking multiple simultaneous downloads
+      await new Promise((res) => setTimeout(res, 200));
     }
-
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-    saveAs(zipBlob, "almost_friday_images.zip");
   };
 
   return (
-    <div style={{ padding: "0rem", fontFamily: "Lobster", maxWidth: "1000px", margin: "0 auto" }}>
+    <div style={{ padding: "0rem", fontFamily: "Lobster", maxWidth: "1000px", margin: "0 auto", backgroundColor: "#ffffff", minHeight: "100vh" }}>
       <h1 style={{ textAlign: "center", fontFamily: "Lobster", fontSize: "3rem" }}>Almost Friday Image Generator</h1>
 
       <p style={{ textAlign: "center" }}><b>Upload Images (Max {MAX_IMAGES}):</b></p>
