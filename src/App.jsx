@@ -418,22 +418,6 @@ function App() {
       {uploadedFiles.length > 0 && (
         <div style={{ marginTop: "2rem", marginBottom: "2rem", textAlign: "center" }}>
           <button
-            onClick={reprocessAllImages}
-            style={{
-              padding: "1rem 2rem",
-              marginRight: "1rem",
-              backgroundColor: "#FF9800",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "1rem",
-              fontWeight: "bold",
-            }}
-          >
-            Process All Images
-          </button>
-          <button
             onClick={handleDownload}
             style={{
               padding: "1rem 2rem",
