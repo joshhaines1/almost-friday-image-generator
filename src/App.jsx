@@ -271,29 +271,19 @@ function App() {
       alert("Please upload at least one image");
       return;
     }
+    // Bundle processed images into a ZIP
+    const zip = new JSZip();
 
-    // Process and download each image individually
     for (let i = 0; i < uploadedFiles.length; i++) {
       const file = uploadedFiles[i];
       const position = imageSettings[i]?.position || "bottom";
       const imagePadding = imageSettings[i]?.padding || 80;
       const blob = await processImage(file, position, imagePadding);
-      try {
-        saveAs(blob, file.name);
-      } catch (err) {
-        // Fallback: create an object URL and open in new tab
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = file.name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-      }
-      // small delay to avoid browser blocking multiple simultaneous downloads
-      await new Promise((res) => setTimeout(res, 200));
+      zip.file(file.name, blob);
     }
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    saveAs(zipBlob, "almost_friday_images.zip");
   };
 
   return (
