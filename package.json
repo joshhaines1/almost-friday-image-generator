@@ -1,6 +1,7 @@
 {
   "name": "almost-friday-app",
   "version": "1.0.0",
+  "homepage": "https://github.com/joshhaines1/almost-friday-image-generator",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
