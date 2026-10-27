@@ -9,7 +9,7 @@ function App() {
   const [overlay, setOverlay] = useState(null);
   const [imageSettings, setImageSettings] = useState({});
   const [padding] = useState(80);
-  const MAX_IMAGES = 10;
+  const MAX_IMAGES = 20;
 
   useEffect(() => {
     const loadOverlay = async () => {
